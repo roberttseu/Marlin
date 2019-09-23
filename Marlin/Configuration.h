@@ -130,13 +130,8 @@
 
 // @section info
 
-// User-specified version info of this build to display in [Pronterface, etc] terminal window during
-// startup. Implementation of an idea by Prof Braino to inform user that any changes made to this
-// build by the user have been successfully uploaded into firmware.
+// Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Tinymachines3D" // Who made the changes.
-#define SHOW_BOOTSCREEN
-#define STRING_SPLASH_LINE1 SHORT_BUILD_VERSION // will be shown during bootup in line 1
-#define STRING_SPLASH_LINE2 WEBSITE_URL         // will be shown during bootup in line 2
 
 /**
  * *** VENDORS PLEASE READ ***
@@ -149,10 +144,13 @@
  * respectfully request that you retain the unmodified Marlin boot screen.
  */
 
-// Enable to show the bitmap in Marlin/_Bootscreen.h on startup.
+// Show the Marlin bootscreen on startup. ** ENABLE FOR PRODUCTION **
+#define SHOW_BOOTSCREEN
+
+// Show the bitmap in Marlin/_Bootscreen.h on startup.
 #define SHOW_CUSTOM_BOOTSCREEN
 
-// Enable to show the bitmap in Marlin/_Statusscreen.h on the status screen.
+// Show the bitmap in Marlin/_Statusscreen.h on the status screen.
 #define CUSTOM_STATUS_SCREEN_IMAGE
 
 // @section machine
@@ -1041,11 +1039,12 @@
 
 /**
  * Z Probe to nozzle (X,Y) offset, relative to (0, 0).
- * X and Y offsets must be integers.
- *
+ * Default X and Y offsets must be integers.
+ * Floats may be set with M851 if required.
+ * 
  * In the following example the X and Y offsets are both positive:
- * #define X_PROBE_OFFSET_FROM_EXTRUDER 10
- * #define Y_PROBE_OFFSET_FROM_EXTRUDER 10
+ *
+ *   #define NOZZLE_TO_PROBE_OFFSET { 10, 10, 0 }
  *
  *     +-- BACK ---+
  *     |           |
@@ -1057,10 +1056,10 @@
  *     |           |
  *     O-- FRONT --+
  *   (0,0)
+ * 
+ * Specify a Probe position as { X, Y, Z }
  */
-#define X_PROBE_OFFSET_FROM_EXTRUDER -22  // X offset: -left  +right  [of the nozzle]
-#define Y_PROBE_OFFSET_FROM_EXTRUDER 0  // Y offset: -front +behind [the nozzle]
-#define Z_PROBE_OFFSET_FROM_EXTRUDER -1.5   // Z offset: -below +above  [the nozzle]
+#define NOZZLE_TO_PROBE_OFFSET { -22, 0, -1.5 }
 
 // Certain types of probes need to stay away from edges
 #define MIN_PROBE_EDGE 5
@@ -1386,9 +1385,9 @@
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   // Set the boundaries for probing (where the probe can reach).
-  #define LEFT_PROBE_BED_POSITION MIN_PROBE_EDGE + 5
-  #define RIGHT_PROBE_BED_POSITION ( X_BED_SIZE + X_PROBE_OFFSET_FROM_EXTRUDER - MIN_PROBE_EDGE -5)
-  #define FRONT_PROBE_BED_POSITION MIN_PROBE_EDGE + 5
+  //#define LEFT_PROBE_BED_POSITION MIN_PROBE_EDGE
+  //#define RIGHT_PROBE_BED_POSITION (X_BED_SIZE - (MIN_PROBE_EDGE))
+  //#define FRONT_PROBE_BED_POSITION MIN_PROBE_EDGE
   //#define BACK_PROBE_BED_POSITION (Y_BED_SIZE - (MIN_PROBE_EDGE))
 
   // Probe along the Y axis, advancing X after each column
@@ -1483,7 +1482,7 @@
  * Commands to execute at the end of G29 probing.
  * Useful to retract or move the Z probe out of the way.
  */
-//#define Z_PROBE_END_SCRIPT "M280 P0 S90"
+//#define Z_PROBE_END_SCRIPT "G1 Z10 F12000\nG1 X15 Y330\nG1 Z0.5\nG1 Z10"
 
 
 // @section homing
@@ -1705,7 +1704,7 @@
   #define NOZZLE_CLEAN_TRIANGLES  3
 
   // Specify positions as { X, Y, Z }
-  #define NOZZLE_CLEAN_START_POINT { 30, 30, (Z_MIN_POS + 1)}
+  #define NOZZLE_CLEAN_START_POINT {  30, 30, (Z_MIN_POS + 1) }
   #define NOZZLE_CLEAN_END_POINT   { 100, 60, (Z_MIN_POS + 1) }
 
   // Circular pattern radius
@@ -2235,7 +2234,7 @@
 //=============================================================================
 
 //
-// FSMC display (MKS Robin, Alfawise U20, JGAurora A5S, A1, etc.)
+// FSMC display (MKS Robin, Alfawise U20, JGAurora A5S, REXYZ A1, etc.)
 //
 //#define FSMC_GRAPHICAL_TFT
 
@@ -2248,6 +2247,9 @@
 //
 //#define TOUCH_BUTTONS
 #if ENABLED(TOUCH_BUTTONS)
+  #define BUTTON_DELAY_EDIT  50 // (ms) Button repeat delay for edit screens
+  #define BUTTON_DELAY_MENU 250 // (ms) Button repeat delay for menus
+
   #define XPT2046_X_CALIBRATION   12316
   #define XPT2046_Y_CALIBRATION  -8981
   #define XPT2046_X_OFFSET       -43
@@ -2258,11 +2260,8 @@
 // RepRapWorld REPRAPWORLD_KEYPAD v1.1
 // http://reprapworld.com/?products_details&products_id=202&cPath=1591_1626
 //
-// REPRAPWORLD_KEYPAD_MOVE_STEP sets how much should the robot move when a key
-// is pressed, a value of 10.0 means 10mm per click.
-//
 //#define REPRAPWORLD_KEYPAD
-//#define REPRAPWORLD_KEYPAD_MOVE_STEP 10.0
+//#define REPRAPWORLD_KEYPAD_MOVE_STEP 10.0 // (mm) Distance to move per key-press
 
 //=============================================================================
 //=============================== Extra Features ==============================
@@ -2390,7 +2389,7 @@
  */
 //#define NUM_SERVOS 3 // Servo index starts with 0 for M280 command
 
-// Delay (in milliseconds) before the next move will start, to give the servo time to reach its target angle.
+// (ms) Delay  before the next move will start, to give the servo time to reach its target angle.
 // 300ms is a good value but you can try less delay.
 // If the servo can't reach the requested position, increase it.
 #define SERVO_DELAY { 300 }
