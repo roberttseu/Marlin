@@ -6,7 +6,7 @@
 
 // Enable this is you have a raptor 2.
 // Selects pin file, runout sensor and stock TMC Drivers automatically
-#define RAPTOR2
+//#define RAPTOR2
 
 /**
  * Enable if you replace the stepper drivers with TMC 2208. Be sure to remove MS3 jumper
@@ -15,14 +15,14 @@
  * you require Linear Advance with a TMC2208 on the extruder!
  * If you have used a UART connection to program the driver to SpreadCycle mode, pease seect that as well
  */
-//#define X_2208
+#define X_2208
 //#define X_SpreadCycle
-//#define Y_2208
-//#define Y_SpreadCycle // Highly recommended as large prints with high mass can cause layer shifts with stealthchop at high speed
+#define Y_2208
+#define Y_SpreadCycle // Highly recommended as large prints with high mass can cause layer shifts with stealthchop at high speed
 //#define Y_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
 //#define Z_2208 // NOT Recommended! Dual stepper current draw is above the recommended limit for this driver
 //#define Z_SpreadCycle
-//#define Z_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
+#define Z_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
 //#define E_2208 // Not Recommended! Stealthchop mode faults with linear advance
 //#define E_SpreadCycle
 
@@ -32,7 +32,9 @@
  */
 #define BED_AC
 
-#define HotendAllMetal
+//#define HotendAllMetal
+#define HotendMosquito
+
 /**
  * Enable if you install a filament runout sensor from www.formbotusa.com
  */
@@ -43,7 +45,7 @@
 /**
  * Enable if you wish to change the auto level strategy to Unified Bed Leveling. Under CUSTOM COMMANDS, run Step 1 and 2 before setting Z Offset
  */
-#define UBL
+//#define UBL
 
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
@@ -197,9 +199,8 @@
   #endif
 #endif
 
-// Optional custom name for your RepStrap or other custom machine
-// Displayed in the LCD "Ready" message
-#define CUSTOM_MACHINE_NAME "TM3D RaPtOr"
+// Name displayed in the LCD "Ready" message and Info menu
+//#define CUSTOM_MACHINE_NAME "TM3D RaPtOr"
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like http://www.uuidgenerator.net/version4
@@ -469,7 +470,9 @@
  *
  * :{ '0':"Not used", '1':"100k / 4.7k - EPCOS", '331':"(3.3V thermistor 1)", '2':"200k / 4.7k - ATC Semitec 204GT-2", '3':"Mendel-parts / 4.7k", '4':"10k !! do not use for a hotend. Bad resolution at high temp. !!", '5':"100K / 4.7k - ATC Semitec 104GT-2 (Used in ParCan & J-Head)", '501':"100K Zonestar (Tronxy X3A)", '512':"100k RPW-Ultra hotend thermistor", '6':"100k / 4.7k EPCOS - Not as accurate as Table 1", '7':"100k / 4.7k Honeywell 135-104LAG-J01", '8':"100k / 4.7k 0603 SMD Vishay NTCS0603E3104FXT", '9':"100k / 4.7k GE Sensing AL03006-58.2K-97-G1", '10':"100k / 4.7k RS 198-961", '11':"100k / 4.7k beta 3950 1%", '12':"100k / 4.7k 0603 SMD Vishay NTCS0603E3104FXT (calibrated for Makibox hot bed)", '13':"100k Hisens 3950  1% up to 300°C for hotend 'Simple ONE ' & hotend 'All In ONE'", '18':"ATC Semitec 204GT-2 (4.7k pullup) Dagoma.Fr - MKS_Base_DKU001327" '20':"Pt100 (Ultimainboard V2.x)", '201':"Pt100 (Overlord)", '51':"100k / 1k - EPCOS", '52':"200k / 1k - ATC Semitec 204GT-2", '55':"100k / 1k - ATC Semitec 104GT-2 (Used in ParCan & J-Head)", '60':"100k Maker's Tool Works Kapton Bed Thermistor beta=3950", '61':"100k Formbot / Vivedino 3950 350C thermistor 4.7k pullup", '66':"Dyze Design 4.7M High Temperature thermistor", '67':"Slice Engineering 450C High Temperature thermistor", '70':"the 100K thermistor found in the bq Hephestos 2", '71':"100k / 4.7k Honeywell 135-104LAF-J01", '147':"Pt100 / 4.7k", '1047':"Pt1000 / 4.7k", '110':"Pt100 / 1k (non-standard)", '1010':"Pt1000 / 1k (non standard)", '-4':"Thermocouple + AD8495", '-3':"Thermocouple + MAX31855 (only for sensor 0)", '-2':"Thermocouple + MAX6675 (only for sensor 0)", '-1':"Thermocouple + AD595", '998':"Dummy 1", '999':"Dummy 2", '1000':"Custom thermistor params" }
  */
-#if ENABLED(RAPTOR2)
+#if ENABLED(HotendMosquito)
+  #define TEMP_SENSOR_0 67
+#elif ENABLED(RAPTOR2)
   #define TEMP_SENSOR_0 61
 #else
   #define TEMP_SENSOR_0 1
@@ -515,14 +518,20 @@
 // Above this temperature the heater will be switched off.
 // This can protect components from overheating, but NOT from shorts and failures.
 // (Use MINTEMP for thermistor short/failure protection.)
-#define HEATER_0_MAXTEMP 305
+#if ENABLED(HotendMosquito)
+  #define HEATER_0_MAXTEMP 450
+#elif ENABLED(RAPTOR2)
+  #define HEATER_0_MAXTEMP 345
+#else
+  #define HEATER_0_MAXTEMP 305
+#endif
 #define HEATER_1_MAXTEMP 275
 #define HEATER_2_MAXTEMP 275
 #define HEATER_3_MAXTEMP 275
 #define HEATER_4_MAXTEMP 275
 #define HEATER_5_MAXTEMP 275
   #if(ENABLED(BED_AC))
-#define BED_MAXTEMP 150
+#define BED_MAXTEMP 165
 #else
   #define BED_MAXTEMP 100
 #endif
@@ -846,7 +855,12 @@
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 250, 120, 5, 70 }
+#define DEFAULT_MAX_FEEDRATE          { 300, 150, 5, 70 }
+
+//#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
+#if ENABLED(LIMITED_MAX_FR_EDITING)
+  #define MAX_FEEDRATE_EDIT_VALUES    { 600, 600, 10, 50 } // ...or, set your own edit limits
+#endif
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -874,6 +888,11 @@
   #define y_accel 500
  #endif
 #define DEFAULT_MAX_ACCELERATION      { x_accel, y_accel, 400, 4000 }
+
+//#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
+#if ENABLED(LIMITED_MAX_ACCEL_EDITING)
+  #define MAX_ACCEL_EDIT_VALUES       { 6000, 6000, 200, 20000 } // ...or, set your own edit limits
+#endif
 
 /**
  * Default Acceleration (change/s) change = mm/s
@@ -922,6 +941,11 @@
     #define DEFAULT_YJERK                 5.0
   #endif
   #define DEFAULT_ZJERK                  0.4
+
+  //#define LIMITED_JERK_EDITING        // Limit edit via M205 or LCD to DEFAULT_aJERK * 2
+  #if ENABLED(LIMITED_JERK_EDITING)
+    #define MAX_JERK_EDIT_VALUES { 20, 20, 0.6, 10 } // ...or, set your own edit limits
+  #endif
 #endif
 
 #define DEFAULT_EJERK    5.0  // May be used by Linear Advance
@@ -1059,8 +1083,11 @@
  * 
  * Specify a Probe position as { X, Y, Z }
  */
-#define NOZZLE_TO_PROBE_OFFSET { -22, 0, -1.5 }
-
+#if ENABLED(HotendMosquito)
+  #define NOZZLE_TO_PROBE_OFFSET { 35, 10, -1.5 }
+#else
+  #define NOZZLE_TO_PROBE_OFFSET { -22, 0, -1.5 }
+#endif
 // Certain types of probes need to stay away from edges
 #define MIN_PROBE_EDGE 5
 
@@ -1083,7 +1110,7 @@
  * A total of 3 or more adds more slow probes, taking the average.
  */
 #define MULTIPLE_PROBING 2
-#define EXTRA_PROBING    1
+//#define EXTRA_PROBING    1
 
 /**
  * Z probes require clearance when deploying, stowing, and moving between
@@ -1104,7 +1131,7 @@
 #define Z_CLEARANCE_MULTI_PROBE     5 // Z Clearance between multiple probes
 #define Z_AFTER_PROBING           5 // Z position after probing is done
 
-#define Z_PROBE_LOW_POINT          -3 // Farthest distance below the trigger-point to go before stopping
+#define Z_PROBE_LOW_POINT          -4 // Farthest distance below the trigger-point to go before stopping
 
 // For M851 give a range for adjusting the Z probe offset
 #define Z_PROBE_OFFSET_RANGE_MIN -20
@@ -1361,8 +1388,8 @@
   // For Cartesian machines, instead of dividing moves on mesh boundaries,
   // split up moves into short segments like a Delta. This follows the
   // contours of the bed more closely than edge-to-edge straight moves.
-  //#define SEGMENT_LEVELED_MOVES
-  //#define LEVELED_SEGMENT_LENGTH 5.0 // (mm) Length of all segments (except the last one)
+  #define SEGMENT_LEVELED_MOVES
+  #define LEVELED_SEGMENT_LENGTH 5.0 // (mm) Length of all segments (except the last one)
 
   /**
    * Enable the G26 Mesh Validation Pattern tool.
