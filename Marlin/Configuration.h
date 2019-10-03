@@ -1065,7 +1065,7 @@
  * Z Probe to nozzle (X,Y) offset, relative to (0, 0).
  * Default X and Y offsets must be integers.
  * Floats may be set with M851 if required.
- * 
+ *
  * In the following example the X and Y offsets are both positive:
  *
  *   #define NOZZLE_TO_PROBE_OFFSET { 10, 10, 0 }
@@ -1080,7 +1080,7 @@
  *     |           |
  *     O-- FRONT --+
  *   (0,0)
- * 
+ *
  * Specify a Probe position as { X, Y, Z }
  */
 #if ENABLED(HotendMosquito)
@@ -1205,7 +1205,7 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#if(ENABLED(E_2208))
+#if (ENABLED(E_2208) && DISABLED(HotendMosquito)) || (ENABLED(HotendMosquito) && DISABLED(E_2208))
   #define INVERT_E0_DIR false
   #define INVERT_E1_DIR true
 #else
