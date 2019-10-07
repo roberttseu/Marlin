@@ -6,7 +6,7 @@
 
 // Enable this is you have a raptor 2.
 // Selects pin file, runout sensor and stock TMC Drivers automatically
-//#define RAPTOR2
+#define RAPTOR2
 
 /**
  * Enable if you replace the stepper drivers with TMC 2208. Be sure to remove MS3 jumper
@@ -15,14 +15,14 @@
  * you require Linear Advance with a TMC2208 on the extruder!
  * If you have used a UART connection to program the driver to SpreadCycle mode, pease seect that as well
  */
-#define X_2208
+//#define X_2208
 //#define X_SpreadCycle
-#define Y_2208
-#define Y_SpreadCycle // Highly recommended as large prints with high mass can cause layer shifts with stealthchop at high speed
+//#define Y_2208
+//#define Y_SpreadCycle // Highly recommended as large prints with high mass can cause layer shifts with stealthchop at high speed
 //#define Y_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
 //#define Z_2208 // NOT Recommended! Dual stepper current draw is above the recommended limit for this driver
 //#define Z_SpreadCycle
-#define Z_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
+//#define Z_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
 //#define E_2208 // Not Recommended! Stealthchop mode faults with linear advance
 //#define E_SpreadCycle
 
@@ -32,8 +32,8 @@
  */
 #define BED_AC
 
-//#define HotendAllMetal
-#define HotendMosquito
+#define HotendAllMetal
+//#define HotendMosquito
 
 /**
  * Enable if you install a filament runout sensor from www.formbotusa.com
@@ -45,7 +45,7 @@
 /**
  * Enable if you wish to change the auto level strategy to Unified Bed Leveling. Under CUSTOM COMMANDS, run Step 1 and 2 before setting Z Offset
  */
-//#define UBL
+#define UBL
 
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
