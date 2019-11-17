@@ -225,7 +225,7 @@ G29_TYPE GcodeSuite::G29() {
   #if ABL_GRID
 
     #if ENABLED(PROBE_MANUALLY)
-      ABL_VAR xy_int8_t meshCount;
+      ABL_VAR xy_uint8_t meshCount;
     #endif
 
     ABL_VAR xy_int_t probe_position_lf, probe_position_rb;
@@ -419,8 +419,8 @@ G29_TYPE GcodeSuite::G29() {
           parser.seenval('F') ? (int)RAW_Y_POSITION(parser.value_linear_units()) : _MAX(Y_CENTER - (Y_BED_SIZE) / 2,      y_min)
         );
         probe_position_rb.set(
-          parser.seenval('R') ? (int)RAW_X_POSITION(parser.value_linear_units()) : _MIN(X_CENTER + (X_BED_SIZE) / 2, x_max),
-          parser.seenval('B') ? (int)RAW_Y_POSITION(parser.value_linear_units()) : _MIN(Y_CENTER + (Y_BED_SIZE) / 2, y_max)
+          parser.seenval('R') ? (int)RAW_X_POSITION(parser.value_linear_units()) : _MIN(probe_position_lf.x + X_BED_SIZE, x_max),
+          parser.seenval('B') ? (int)RAW_Y_POSITION(parser.value_linear_units()) : _MIN(probe_position_lf.y + Y_BED_SIZE, y_max)
         );
       }
 
@@ -446,10 +446,6 @@ G29_TYPE GcodeSuite::G29() {
     #endif // ABL_GRID
 
     if (verbose_level > 0) {
-      SERIAL_ECHOLNPAIR("Left Probe Position ", probe_position_lf.x);
-      SERIAL_ECHOLNPAIR("Right Probe Position ", probe_position_rb.x);
-      SERIAL_ECHOLNPAIR("Front Probe Position ", probe_position_lf.y);
-      SERIAL_ECHOLNPAIR("Back Probe Position ", probe_position_rb.y);
       SERIAL_ECHOPGM("G29 Auto Bed Leveling");
       if (dryrun) SERIAL_ECHOPGM(" (DRYRUN)");
       SERIAL_EOL();
@@ -682,13 +678,13 @@ G29_TYPE GcodeSuite::G29() {
 
       measured_z = 0;
 
-      xy_int8_t meshCount;
+      xy_uint8_t meshCount;
 
       // Outer loop is X with PROBE_Y_FIRST enabled
       // Outer loop is Y with PROBE_Y_FIRST disabled
       for (PR_OUTER_VAR = 0; PR_OUTER_VAR < PR_OUTER_END && !isnan(measured_z); PR_OUTER_VAR++) {
 
-        int8_t inStart, inStop, inInc;
+        uint8_t inStart, inStop, inInc;
 
         if (zig) { // away from origin
           inStart = 0;
@@ -697,8 +693,8 @@ G29_TYPE GcodeSuite::G29() {
         }
         else {     // towards origin
           inStart = PR_INNER_END - 1;
-          inStop = -1;
-          inInc = -1;
+          inStop = 0xFF;
+          inInc = 0xFF;
         }
 
         zig ^= true; // zag
@@ -726,10 +722,10 @@ G29_TYPE GcodeSuite::G29() {
 
           if (verbose_level) SERIAL_ECHOLNPAIR("Probing mesh point ", int(pt_index), "/", int(GRID_MAX_POINTS), ".");
           #if HAS_DISPLAY
-            ui.status_printf_P(0, PSTR(S_FMT " %i/%i"), PSTR(MSG_PROBING_MESH), int(pt_index), int(GRID_MAX_POINTS));
+            ui.status_printf_P(0, PSTR(S_FMT " %i/%i"), GET_TEXT(MSG_PROBING_MESH), int(pt_index), int(GRID_MAX_POINTS));
           #endif
 
-          measured_z = faux ? 0.001 * random(-100, 101) : probe_at_point(probePos, raise_after, verbose_level);
+          measured_z = faux ? 0.001f * random(-100, 101) : probe_at_point(probePos, raise_after, verbose_level);
 
           if (isnan(measured_z)) {
             set_bed_leveling_enabled(abl_should_enable);
@@ -750,7 +746,7 @@ G29_TYPE GcodeSuite::G29() {
 
             z_values[meshCount.x][meshCount.y] = measured_z + zoffset;
             #if ENABLED(EXTENSIBLE_UI)
-              ExtUI::onMeshUpdate(meshCount.x, meshCount.y, z_values[meshCount.x][meshCount.y]);
+              ExtUI::onMeshUpdate(meshCount, z_values[meshCount.x][meshCount.y]);
             #endif
 
           #endif
@@ -768,7 +764,7 @@ G29_TYPE GcodeSuite::G29() {
       for (uint8_t i = 0; i < 3; ++i) {
         if (verbose_level) SERIAL_ECHOLNPAIR("Probing point ", int(i), "/3.");
         #if HAS_DISPLAY
-          ui.status_printf_P(0, PSTR(MSG_PROBING_MESH " %i/3"), int(i));
+          ui.status_printf_P(0, PSTR(S_FMT" %i/3"), GET_TEXT(MSG_PROBING_MESH)), int(i);
         #endif
 
         // Retain the last probe position
