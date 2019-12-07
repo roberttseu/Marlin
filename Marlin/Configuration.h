@@ -35,6 +35,8 @@
 //#define HotendAllMetal
 #define HotendMosquito
 
+//#define E3DHermeaExtruder // Swap center 2 wires on extruder connector on Raptor 2.
+
 /**
  * Enable if you install a filament runout sensor from www.formbotusa.com
  */
@@ -392,9 +394,10 @@
 //#define PSU_NAME "Power Supply"
 
 #if ENABLED(PSU_CONTROL)
-  #define PSU_ACTIVE_HIGH false // Set 'false' for ATX (1), 'true' for X-Box (2)
+  #define PSU_ACTIVE_HIGH false     // Set 'false' for ATX, 'true' for X-Box
 
-  //#define PS_DEFAULT_OFF      // Keep power off until enabled directly with M80
+  //#define PSU_DEFAULT_OFF         // Keep power off until enabled directly with M80
+  //#define PSU_POWERUP_DELAY 100   // (ms) Delay for the PSU to warm up to full power
 
   //#define AUTO_POWER_CONTROL  // Enable automatic control of the PS_ON pin
   #if ENABLED(AUTO_POWER_CONTROL)
@@ -419,9 +422,10 @@
  *
  * Temperature sensors available:
  *
+ *    -5 : PT100 / PT1000 with MAX31865 (only for sensors 0-1)
+ *    -3 : thermocouple with MAX31855 (only for sensors 0-1)
+ *    -2 : thermocouple with MAX6675 (only for sensors 0-1)
  *    -4 : thermocouple with AD8495
- *    -3 : thermocouple with MAX31855 (only for sensor 0)
- *    -2 : thermocouple with MAX6675 (only for sensor 0)
  *    -1 : thermocouple with AD595
  *     0 : not used
  *     1 : 100k thermistor - best choice for EPCOS 100k (4.7k pullup)
@@ -474,6 +478,8 @@
   #define TEMP_SENSOR_0 67
 #elif ENABLED(RAPTOR2)
   #define TEMP_SENSOR_0 61
+#elif ENABLED(E3DHermeaExtruder)
+  #define TEMP_SENSOR_0 5
 #else
   #define TEMP_SENSOR_0 1
 #endif
@@ -833,13 +839,20 @@
 /**
  * Default Axis Steps Per Unit (steps/mm)
  * Override with M92
- *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
+ *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-
-#if(ENABLED(Y_2208) || ENABLED(Y_4988))
-  #define Y_STEPSMM 80
+#if ENABLED(E3DHermeaExtruder)
+  #if(ENABLED(Y_2208) || ENABLED(Y_4988))
+    #define Y_STEPSMM 409
+  #else
+    #define Y_STEPSMM 818
+  #endif
 #else
-  #define Y_STEPSMM 160
+  #if(ENABLED(Y_2208) || ENABLED(Y_4988))
+    #define Y_STEPSMM 80
+  #else
+    #define Y_STEPSMM 160
+  #endif
 #endif
 
 #if(ENABLED(Z_2208) || ENABLED(Z_4988))
@@ -870,12 +883,12 @@
  */
  #if(ENABLED(X_2208))
   #if(ENABLED(X_SpreadCycle))
-    #define x_accel 1750
+    #define x_accel 750
   #else
-    #define x_accel 1000
+    #define x_accel 500
   #endif
  #else
-  #define x_accel 1500
+  #define x_accel 750
  #endif
 
   #if(ENABLED(Y_2208))
@@ -947,7 +960,7 @@
  *
  * See https://github.com/synthetos/TinyG/wiki/Jerk-Controlled-Motion-Explained
  */
-//#define S_CURVE_ACCELERATION
+#define S_CURVE_ACCELERATION
 
 //===========================================================================
 //============================= Z Probe Options =============================
@@ -2213,10 +2226,10 @@
 //#define MALYAN_LCD
 
 //
-// LulzBot Color Touch UI for FTDI EVE (FT800/FT810) displays
+// Touch UI for FTDI EVE (FT800/FT810) displays
 // See Configuration_adv.h for all configuration options.
 //
-//#define LULZBOT_TOUCH_UI
+//#define TOUCH_UI_FTDI_EVE
 
 //
 // Third-party or vendor-customized controller interfaces.
