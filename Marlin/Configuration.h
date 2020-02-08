@@ -35,7 +35,13 @@
 //#define HotendAllMetal
 //#define HotendMosquito
 
-//#define E3DHermeaExtruder // Swap center 2 wires on extruder connector on Raptor 2.
+/**
+ * TM3D E3D Hemera Kit
+ * Swap center 2 wires on extruder connector on Raptor 2
+ *
+ */
+
+//#define E3DHermeaExtruder
 
 /**
  * Enable if you install a filament runout sensor from www.formbotusa.com
@@ -48,7 +54,7 @@
 /**
  * Enable if you wish to change the auto level strategy to Unified Bed Leveling. Under CUSTOM COMMANDS, run Step 1 and 2 before setting Z Offset
  */
-#define UBL
+//#define UBL
 
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
@@ -1111,16 +1117,18 @@
  *
  * Specify a Probe position as { X, Y, Z }
  */
-#if ENABLED(HotendMosquito)
-  #define NOZZLE_TO_PROBE_OFFSET { 35, 10, -1.5 }
+#if ENABLED(E3DHermeaExtruder)
+  #define NOZZLE_TO_PROBE_OFFSET { 43, 0, 0 }
+#elif ENABLED(HotendMosquito)
+  #define NOZZLE_TO_PROBE_OFFSET { 35, 10, 0 }
 #else
-  #define NOZZLE_TO_PROBE_OFFSET { -22, 0, -1.5 }
+  #define NOZZLE_TO_PROBE_OFFSET { -22, 0, 0 }
 #endif
 
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#define MIN_PROBE_EDGE 5
+#define MIN_PROBE_EDGE 8
 
 // X and Y axis travel speed (mm/m) between probes
 #define XY_PROBE_SPEED 10000
@@ -1165,8 +1173,8 @@
 #define Z_PROBE_LOW_POINT          -4 // Farthest distance below the trigger-point to go before stopping
 
 // For M851 give a range for adjusting the Z probe offset
-#define Z_PROBE_OFFSET_RANGE_MIN -20
-#define Z_PROBE_OFFSET_RANGE_MAX 20
+#define Z_PROBE_OFFSET_RANGE_MIN -9
+#define Z_PROBE_OFFSET_RANGE_MAX 9
 
 // Enable the M48 repeatability test to test probe accuracy
 //#define Z_MIN_PROBE_REPEATABILITY_TEST
