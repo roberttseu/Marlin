@@ -41,7 +41,7 @@
  *
  */
 
-//#define E3DHermeaExtruder
+//#define E3DHemeraExtruder
 
 /**
  * Enable if you install a filament runout sensor from www.formbotusa.com
@@ -487,7 +487,7 @@
   #define TEMP_SENSOR_0 67
 #elif ENABLED(RAPTOR2)
   #define TEMP_SENSOR_0 61
-#elif ENABLED(E3DHermeaExtruder)
+#elif ENABLED(E3DHemeraExtruder)
   #define TEMP_SENSOR_0 5
 #else
   #define TEMP_SENSOR_0 1
@@ -583,7 +583,11 @@
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
 
   // Ultimaker
-  #if(ENABLED(HotendAllMetal))
+  #if ENABLED(E3DHemeraExtruder)
+    #define  DEFAULT_Kp 21.9
+    #define  DEFAULT_Ki 1.5
+    #define  DEFAULT_Kd 79.88
+  #elif ENABLED(HotendAllMetal)
     #define  DEFAULT_Kp 21.9
     #define  DEFAULT_Ki 1.5
     #define  DEFAULT_Kd 79.88
@@ -862,18 +866,24 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#if ENABLED(E3DHermeaExtruder)
-  #if(ENABLED(Y_2208) || ENABLED(Y_4988))
-    #define Y_STEPSMM 409
+#if ENABLED(E3DHemeraExtruder)
+  #if(ENABLED(E_2208) || ENABLED(E_4988))
+    #define E_STEPSMM 409
   #else
-    #define Y_STEPSMM 818
+    #define E_STEPSMM 818
   #endif
 #else
-  #if(ENABLED(Y_2208) || ENABLED(Y_4988))
-    #define Y_STEPSMM 80
+  #if(ENABLED(E_2208) || ENABLED(E_4988))
+    #define E_STEPSMM 96
   #else
-    #define Y_STEPSMM 160
+    #define E_STEPSMM 192
   #endif
+#endif
+
+#if(ENABLED(Y_2208) || ENABLED(Y_4988))
+  #define Y_STEPSMM 80
+#else
+  #define Y_STEPSMM 160
 #endif
 
 #if(ENABLED(Z_2208) || ENABLED(Z_4988))
@@ -882,7 +892,7 @@
   #define Z_STEPSMM 1600
 #endif
 
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80,Y_STEPSMM , Z_STEPSMM, 96 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, Y_STEPSMM, Z_STEPSMM, E_STEPSMM }
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -1117,8 +1127,8 @@
  *
  * Specify a Probe position as { X, Y, Z }
  */
-#if ENABLED(E3DHermeaExtruder)
-  #define NOZZLE_TO_PROBE_OFFSET { 43, 0, 0 }
+#if ENABLED(E3DHemeraExtruder)
+  #define NOZZLE_TO_PROBE_OFFSET { -38, 0, 0 }
 #elif ENABLED(HotendMosquito)
   #define NOZZLE_TO_PROBE_OFFSET { 35, 10, 0 }
 #else
@@ -1244,7 +1254,7 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#if (ENABLED(E_2208) && DISABLED(HotendMosquito)) || (ENABLED(HotendMosquito) && DISABLED(E_2208))
+#if (ENABLED(E_2208) && NONE(HotendMosquito, E3DHemeraExtruder)) || (ANY(HotendMosquito, E3DHemeraExtruder) && DISABLED(E_2208))
   #define INVERT_E0_DIR false
   #define INVERT_E1_DIR true
 #else
