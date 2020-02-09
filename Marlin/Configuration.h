@@ -36,6 +36,7 @@
  */
 //#define FilamentSensor // Standard older TM3D runout sensor
 //#define lerdgeFilSensor // Newer inverted logic TM3D Runout Sensor
+//#define filamentEncoder
 
 
 //////////////////////////////////DO not edit below here unless you know what youre doing!  //////////////////////////////////
@@ -79,9 +80,7 @@
   #define E_2208
   #define FilamentSensor
 #endif
-#if ENABLED(lerdgeFilSensor) && DISABLED(FilamentSensor)
-  #define FilamentSensor
-#endif
+
 /**
  * Configuration.h
  *
@@ -1299,7 +1298,7 @@
  * For other boards you may need to define FIL_RUNOUT_PIN, FIL_RUNOUT2_PIN, etc.
  * By default the firmware assumes HIGH=FILAMENT PRESENT.
  */
- #if ENABLED(FilamentSensor)
+ #if ANY(FilamentSensor, filamentEncoder, lerdgeFilSensor)
   #define FILAMENT_RUNOUT_SENSOR
 #endif
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
@@ -1323,13 +1322,19 @@
   // After a runout is detected, continue printing this length of filament
   // before executing the runout script. Useful for a sensor at the end of
   // a feed tube. Requires 4 bytes SRAM per sensor, plus 4 bytes overhead.
-  #define FILAMENT_RUNOUT_DISTANCE_MM 5
+  #if ENABLED(filamentEncoder)
+    #define FILAMENT_RUNOUT_DISTANCE_MM 15
+  #else
+    #define FILAMENT_RUNOUT_DISTANCE_MM 5
+  #endif
 
   #ifdef FILAMENT_RUNOUT_DISTANCE_MM
     // Enable this option to use an encoder disc that toggles the runout pin
     // as the filament moves. (Be sure to set FILAMENT_RUNOUT_DISTANCE_MM
     // large enough to avoid false positives.)
-    //#define FILAMENT_MOTION_SENSOR
+    #if ENABLED(filamentEncoder)
+      #define FILAMENT_MOTION_SENSOR
+    #endif
   #endif
 #endif
 
