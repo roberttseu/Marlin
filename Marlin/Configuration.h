@@ -1287,7 +1287,7 @@
 
 // The size of the print bed
 #if ENABLED(RAPTOR2)
-  #define X_BED_SIZE 387
+  #define X_BED_SIZE 385
 #else
   #define X_BED_SIZE 400
 #endif
