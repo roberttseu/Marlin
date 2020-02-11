@@ -38,6 +38,8 @@
 //#define lerdgeFilSensor // Newer inverted logic TM3D Runout Sensor
 //#define filamentEncoder
 
+#define autoCalibrationKit
+
 
 //////////////////////////////////DO not edit below here unless you know what youre doing!  //////////////////////////////////
 
