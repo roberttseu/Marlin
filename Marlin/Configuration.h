@@ -6,7 +6,7 @@
 
 // Enable this is you have a raptor 2.
 // Selects pin file, runout sensor and stock TMC Drivers automatically
-#define RAPTOR2
+//#define RAPTOR2
 
 /**
  * Enable if you replace the stepper drivers with TMC 2208. Be sure to remove MS3 jumper
@@ -15,17 +15,17 @@
  * you require Linear Advance with a TMC2208 on the extruder!
  * If you have used a UART connection to program the driver to SpreadCycle mode, pease seect that as well
  */
-//#define X_2208
+#define X_2208
 //#define X_SpreadCycle
-//#define Y_2208
+#define Y_2208
 //#define Y_SpreadCycle // Highly recommended as large prints with high mass can cause layer shifts with stealthchop at high speed
 //#define Y_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
-//#define Z_2208 // NOT Recommended! Dual stepper current draw is above the recommended limit for this driver
+#define Z_2208 // NOT Recommended! Dual stepper current draw is above the recommended limit for this driver
 //#define Z_SpreadCycle
 //#define Z_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
 //#define E_2208 // Not Recommended! Stealthchop mode faults with linear advance
 //#define E_SpreadCycle
-//#define E_4988
+#define E_4988
 
 
 /**
@@ -42,13 +42,13 @@
  *
  */
 
-//#define E3DHemeraExtruder
+#define E3DHemeraExtruder
 
 /**
  * Enable if you install a filament runout sensor from www.formbotusa.com
  */
-//#define RunoutSensor
-#define RunoutEncoder
+#define RunoutSensor
+//#define RunoutEncoder
 
 //#define tallVersion // For 700mm version
 
@@ -1255,7 +1255,7 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#if (ENABLED(E_2208) && NONE(HotendMosquito, E3DHemeraExtruder)) || (ANY(HotendMosquito, E3DHemeraExtruder) && DISABLED(E_2208))
+#if (ENABLED(E_2208) && DISABLED(HotendMosquito)) || (ENABLED(HotendMosquito) && DISABLED(E_2208))
   #define INVERT_E0_DIR false
   #define INVERT_E1_DIR true
 #else
@@ -1287,7 +1287,7 @@
 // @section machine
 
 // The size of the print bed
-#if ENABLED(RAPTOR2)
+#if ANY(RAPTOR2, E3DHemeraExtruder)
   #define X_BED_SIZE 385
 #else
   #define X_BED_SIZE 400
