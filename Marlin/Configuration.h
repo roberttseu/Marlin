@@ -6,7 +6,7 @@
 
 // Enable this is you have a raptor 2.
 // Selects pin file, runout sensor and stock TMC Drivers automatically
-//#define RAPTOR2
+#define RAPTOR2
 
 /**
  * Enable if you replace the stepper drivers with TMC 2208. Be sure to remove MS3 jumper
@@ -15,17 +15,21 @@
  * you require Linear Advance with a TMC2208 on the extruder!
  * If you have used a UART connection to program the driver to SpreadCycle mode, pease seect that as well
  */
-#define X_2208
+//#define X_2208 // TMC2208 or 2209 in Standalone Mode
 //#define X_SpreadCycle
-#define Y_2208
+//#define X_2209_Uart
+//#define Y_2208
 //#define Y_SpreadCycle // Highly recommended as large prints with high mass can cause layer shifts with stealthchop at high speed
 //#define Y_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
-#define Z_2208 // NOT Recommended! Dual stepper current draw is above the recommended limit for this driver
+//#define Y_2209_Uart
+//#define Z_2208 // NOT Recommended! Dual stepper current draw is above the recommended limit for this driver
 //#define Z_SpreadCycle
 //#define Z_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
+//#define Z_2209_Uart
 //#define E_2208 // Not Recommended! Stealthchop mode faults with linear advance
 //#define E_SpreadCycle
-#define E_4988
+//#define E_4988
+//#define E_2209_Uart
 
 
 /**
@@ -33,7 +37,7 @@
  */
 #define BED_AC
 
-//#define HotendAllMetal
+#define HotendAllMetal
 //#define HotendMosquito
 
 /**
@@ -42,12 +46,12 @@
  *
  */
 
-#define E3DHemeraExtruder
+//#define E3DHemeraExtruder
 
 /**
  * Enable if you install a filament runout sensor from www.formbotusa.com
  */
-#define RunoutSensor
+//#define RunoutSensor
 //#define RunoutEncoder
 
 //#define tallVersion // For 700mm version
@@ -55,7 +59,7 @@
 /**
  * Enable if you wish to change the auto level strategy to Unified Bed Leveling. Under CUSTOM COMMANDS, run Step 1 and 2 before setting Z Offset
  */
-//#define UBL
+//#define UBL //Disabled Firmware Retract and the animated boot screen
 
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
@@ -64,10 +68,18 @@
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
 
 #if ENABLED(RAPTOR2)
-  #define X_2208
-  #define Y_2208
-  #define Z_2208
-  #define E_2208
+  #if DISABLED(X_2209_Uart)
+    #define X_2208
+  #endif
+  #if DISABLED(Y_2209_Uart)
+    #define Y_2208
+  #endif
+  #if DISABLED(Z_2209_Uart)
+    #define Z_2208
+  #endif
+  #if DISABLED(E_2209_Uart)
+    #define E_2208
+  #endif
   #define RunoutSensor
 #endif
 /**
@@ -785,21 +797,28 @@
  *          TMC5130, TMC5130_STANDALONE, TMC5160, TMC5160_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'L6474', 'POWERSTEP01', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
-#if ENABLED(X_2208)
+#if ENABLED(X_2209_Uart)
+  #define X_DRIVER_TYPE  TMC2209
+  #define X2_DRIVER_TYPE TMC2209
+#elif ENABLED(X_2208)
   #define X_DRIVER_TYPE  TMC2208_STANDALONE
   #define X2_DRIVER_TYPE TMC2208_STANDALONE
 #else
   #define X_DRIVER_TYPE  A4988
   #define X2_DRIVER_TYPE A4988
 #endif
-#if ENABLED(Y_2208)
+#if ENABLED(Y_2209_Uart)
+  #define Y_DRIVER_TYPE  TMC2209
+#elif ENABLED(Y_2208)
   #define Y_DRIVER_TYPE  TMC2208_STANDALONE
 #elif ENABLED(Y_4988)
   #define Y_DRIVER_TYPE  A4988
 #else
   #define Y_DRIVER_TYPE  DRV8825
 #endif
-#if ENABLED(Z_2208)
+#if ENABLED(Z_2209_Uart)
+  #define Z_DRIVER_TYPE  TMC2209
+#elif ENABLED(Z_2208)
   #define Z_DRIVER_TYPE  TMC2208_STANDALONE
 #elif ENABLED(Z_4988)
   #define Z_DRIVER_TYPE  A4988
@@ -810,8 +829,11 @@
 //#define Z2_DRIVER_TYPE A4988
 //#define Z3_DRIVER_TYPE A4988
 //#define Z4_DRIVER_TYPE A4988
-#if ENABLED(E_2208)
-  #define E0_DRIVER_TYPE  TMC2208_STANDALONE
+#if ENABLED(E_2209_Uart)
+  #define E0_DRIVER_TYPE TMC2209
+  #define E1_DRIVER_TYPE TMC2209
+#elif ENABLED(E_2208)
+  #define E0_DRIVER_TYPE TMC2208_STANDALONE
   #define E1_DRIVER_TYPE TMC2208_STANDALONE
 #else
   #define E0_DRIVER_TYPE  DRV8825
@@ -868,26 +890,26 @@
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
 #if ENABLED(E3DHemeraExtruder)
-  #if(ENABLED(E_2208) || ENABLED(E_4988))
+  #if ANY(E_2208, E_4988, E_2209_Uart)
     #define E_STEPSMM 409
   #else
     #define E_STEPSMM 818
   #endif
 #else
-  #if(ENABLED(E_2208) || ENABLED(E_4988))
+  #if ANY(E_2208, E_4988, E_2209_Uart)
     #define E_STEPSMM 96
   #else
     #define E_STEPSMM 192
   #endif
 #endif
 
-#if(ENABLED(Y_2208) || ENABLED(Y_4988))
+#if ANY(Y_2208, Y_4988, Y_2209_Uart)
   #define Y_STEPSMM 80
 #else
   #define Y_STEPSMM 160
 #endif
 
-#if(ENABLED(Z_2208) || ENABLED(Z_4988))
+#if ANY(Z_2208, Z_4988, Z_2209_Uart)
   #define Z_STEPSMM 800
 #else
   #define Z_STEPSMM 1600
@@ -1235,17 +1257,17 @@
 // @section machine
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
- #if(ENABLED(X_2208))
+ #if ANY(X_2208, X_2209_Uart)
   #define INVERT_X_DIR true
 #else
   #define INVERT_X_DIR false
 #endif
-#if(ENABLED(Y_2208))
+#if ANY(Y_2208, Y_2209_Uart)
   #define INVERT_Y_DIR true
 #else
   #define INVERT_Y_DIR false
 #endif
-#if(ENABLED(Z_2208))
+#if ANY(Z_2208, Z_2209_Uart)
   #define INVERT_Z_DIR false
 #else
   #define INVERT_Z_DIR true
@@ -1255,7 +1277,7 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#if (ENABLED(E_2208) && DISABLED(HotendMosquito)) || (ENABLED(HotendMosquito) && DISABLED(E_2208))
+#if (ANY(E_2208, E_2209_Uart) && DISABLED(HotendMosquito)) || (ENABLED(HotendMosquito) && NONE(E_2208, E_2209_Uart))
   #define INVERT_E0_DIR false
   #define INVERT_E1_DIR true
 #else
