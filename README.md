@@ -19,13 +19,13 @@ For the UART install, you will need to solder 1 wire. R51 on the top left of the
 
 Set the address using jumpers on pins MS1 and MS2.
 
-## Address | MS1  | MS2
-##       0 | LOW  | LOW
-##       1 | HIGH | LOW
-##       2 | LOW  | HIGH
-##       3 | HIGH | HIGH
+- Address | MS1  | MS2
+-       0 | LOW  | LOW
+-       1 | HIGH | LOW
+-       2 | LOW  | HIGH
+-       3 | HIGH | HIGH
 
-- For all drivers, remove MS3 which is the bottom jumper.
+For all drivers, remove MS3 which is the bottom jumper.
 - X : All Jumpers Out
 - Y : MS2 (Middle Pin) only
 - Z : MS1 (Top Pin) Only
