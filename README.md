@@ -15,6 +15,31 @@ The firmware branches maintained here are made possible by the support of sponso
 
 All configuration options intended to be adjusted by end users have been placed in the top section of Configuration.h and have been documented there. There is typically a break line to segregate the standard configuration below. Anything aside from the upper options is intended for advanced users only.
 
+For the UART install, you will need to solder 1 wire. R51 on the top left of the board is needed for the RX pin. This assumes 2209 drivers as UART can multiplex.
+
+Set the address using jumpers on pins MS1 and MS2.
+Address | MS1  | MS2
+       0 | LOW  | LOW
+       1 | HIGH | LOW
+       2 | LOW  | HIGH
+       3 | HIGH | HIGH
+
+For all drivers, remove MS3 which is the bottom jumper.
+X : All Jumpers Out
+Y : MS2 (Middle Pin) only
+Z : MS1 (Top Pin) Only
+E : MS1&2 (Top 2 Pins)
+
+You will need to make a Y cable with a 10k ohm resistor.
+
+https://www.instructables.com/id/UART-This-Serial-Control-of-Stepper-Motors-With-th/?fbclid=IwAR115Kg_W033bzRRLa81lLNkm8Wg82okh_P7f-dgfssG01DVPmGmWi6qQKA
+
+Start at Step 6 here
+
+The RX side (no resistor) will connect to the solder pad mentioned above. The TX side connects to the A4 Pin of Aux 2.
+
+Each one of the TMC2209 drivers will simply jumper to each other in a chain.
+
 
 ## Support
 
