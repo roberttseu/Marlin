@@ -17,19 +17,19 @@
  */
 //#define X_2208 // TMC2208 or 2209 in Standalone Mode
 //#define X_SpreadCycle
-//#define X_2209_Uart
+#define X_2209_Uart
 //#define Y_2208
 //#define Y_SpreadCycle // Highly recommended as large prints with high mass can cause layer shifts with stealthchop at high speed
 //#define Y_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
-//#define Y_2209_Uart
+#define Y_2209_Uart
 //#define Z_2208 // NOT Recommended! Dual stepper current draw is above the recommended limit for this driver
 //#define Z_SpreadCycle
 //#define Z_4988  // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
-//#define Z_2209_Uart
+#define Z_2209_Uart
 //#define E_2208 // Not Recommended! Stealthchop mode faults with linear advance
 //#define E_SpreadCycle
 //#define E_4988
-//#define E_2209_Uart
+#define E_2209_Uart
 
 
 /**
@@ -52,14 +52,14 @@
  * Enable if you install a filament runout sensor from www.formbotusa.com
  */
 //#define RunoutSensor
-//#define RunoutEncoder
+#define RunoutEncoder
 
 //#define tallVersion // For 700mm version
 
 /**
  * Enable if you wish to change the auto level strategy to Unified Bed Leveling. Under CUSTOM COMMANDS, run Step 1 and 2 before setting Z Offset
  */
-//#define UBL //Disabled Firmware Retract and the animated boot screen
+#define UBL //Disabled Firmware Retract and the animated boot screen
 
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
@@ -120,7 +120,7 @@
  * Advanced settings can be found in Configuration_adv.h
  *
  */
-#define CONFIGURATION_H_VERSION 020000
+#define CONFIGURATION_H_VERSION 020004
 
 //===========================================================================
 //============================= Getting Started =============================
@@ -1564,7 +1564,7 @@
 #define LEVEL_BED_CORNERS
 
 #if ENABLED(LEVEL_BED_CORNERS)
-  #define LEVEL_CORNERS_INSET 30    // (mm) An inset for corner leveling
+  #define LEVEL_CORNERS_INSET_LFRB {30, 30, 30, 30}    // (mm) An inset for corner leveling
   #define LEVEL_CORNERS_Z_HOP  4.0  // (mm) Move nozzle up before moving between corners
   #define LEVEL_CORNERS_HEIGHT 0.0  // (mm) Z height of nozzle at leveling points
   #define LEVEL_CENTER_TOO        // Move to the center after the last corner
