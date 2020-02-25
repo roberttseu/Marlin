@@ -59,7 +59,7 @@
 /**
  * Enable if you wish to change the auto level strategy to Unified Bed Leveling. Under CUSTOM COMMANDS, run Step 1 and 2 before setting Z Offset
  */
-#define UBL //Disabled Firmware Retract and the animated boot screen
+//#define UBL //Disabled Firmware Retract and the animated boot screen
 
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
