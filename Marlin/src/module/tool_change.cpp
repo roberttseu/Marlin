@@ -1068,7 +1068,7 @@ void tool_change(const uint8_t new_tool, bool no_move/*=false*/) {
     #endif
 
     #ifdef EVENT_GCODE_AFTER_TOOLCHANGE
-      gcode.process_subcommands_now_P(EVENT_GCODE_AFTER_TOOLCHANGE);
+      gcode.process_subcommands_now_P(PSTR(EVENT_GCODE_AFTER_TOOLCHANGE));
     #endif
 
     SERIAL_ECHO_START();
