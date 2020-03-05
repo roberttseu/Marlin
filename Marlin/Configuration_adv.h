@@ -149,7 +149,7 @@
  * THERMAL_PROTECTION_HYSTERESIS and/or THERMAL_PROTECTION_PERIOD
  */
 #if ENABLED(THERMAL_PROTECTION_HOTENDS)
-  #define THERMAL_PROTECTION_PERIOD 60        // Seconds
+  #define THERMAL_PROTECTION_PERIOD 30        // Seconds
   #define THERMAL_PROTECTION_HYSTERESIS 15     // Degrees Celsius
 
   #define ADAPTIVE_FAN_SLOWING              // Slow part cooling fan if temperature drops
@@ -1634,7 +1634,7 @@
 
 // Support for G5 with XYZE destination and IJPQ offsets. Requires ~2666 bytes.
 #if DISABLED(autoCalibrationKit)
-  #define BEZIER_CURVE_SUPPORT
+  //#define BEZIER_CURVE_SUPPORT
 #endif
 
 /**
