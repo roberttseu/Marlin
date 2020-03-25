@@ -57,13 +57,13 @@
  *
  */
 
-//#define E3DHemeraExtruder
+#define E3DHemeraExtruder
 
 /**
  * Enable if you install a filament runout sensor from www.formbotusa.com
  */
 //#define RunoutSensor
-//#define RunoutEncoder
+#define RunoutEncoder
 
 //#define tallVersion // For 700mm version
 
