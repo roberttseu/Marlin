@@ -1,5 +1,5 @@
  // If you have a trex 3, stock is this option plus 2208 on all axis. None in spreadcycle.
-//#define TREX3
+#define TREX3
 
 // If you have a trex 3 that was upgraded from a 2+ with the kit, modifies home position and offsets.
 //#define TREX3_UPGRADE
@@ -10,7 +10,7 @@
 //#define X_S109
 
 // Y all options off defaults to 2+ 8825 / 3 2208
-#define Y_2208 // Highly recommended as large prints with high mass can cause layer shifts with stealthchop at high speed
+//#define Y_2208 // Highly recommended as large prints with high mass can cause layer shifts with stealthchop at high speed
 //#define Y_Spreadcycle
 //#define Y_4988 // Some machines shipped with 4988 drivers across the board. Set this if you arent sure what you have and all the drivers look identical
 //#define Y_S109
@@ -26,9 +26,9 @@
 //#define E_Spreadcycle
 //#define E_S109
 
-//#define BedAC
+#define BedAC
 
-//#define tallVersion
+#define tallVersion
 
 //#define ABL_Bilinear
 /*
