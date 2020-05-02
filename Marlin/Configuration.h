@@ -1218,18 +1218,18 @@
 // @section machine
 
 // The size of the print bed
- #if ENABLED(PetsfangMicroswiss)
-  #define PetsfangModifier 10
+ #if ANY(PetsfangMicroswiss, Mosquito)
+  #define CarriageModifier 10
 #else
-  #define PetsfangModifier 0
+  #define CarriageModifier 0
 #endif
 
 #if ENABLED(SX2)
-  #define X_BED_SIZE 248 - PetsfangModifier
-  #define Y_BED_SIZE 238 - PetsfangModifier
+  #define X_BED_SIZE 248 - CarriageModifier
+  #define Y_BED_SIZE 238 - CarriageModifier
 #else
-  #define X_BED_SIZE 398 - PetsfangModifier
-  #define Y_BED_SIZE 390 - PetsfangModifier
+  #define X_BED_SIZE 398 - CarriageModifier
+  #define Y_BED_SIZE 390 - CarriageModifier
 #endif
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
