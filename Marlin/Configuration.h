@@ -1070,13 +1070,19 @@
   #define NOZZLE_TO_PROBE_OFFSET { -42, -5, 0 }
 #elif ENABLED(E3DV6)
   #define NOZZLE_TO_PROBE_OFFSET { 36, 15, 0 }
+#elif ENABLED(Mosquito)
+  #define NOZZLE_TO_PROBE_OFFSET { 0, 26, 0 }
 #else
   #define NOZZLE_TO_PROBE_OFFSET { 37, -10, 0 }
 #endif
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#define MIN_PROBE_EDGE 5
+#if ENABLED(Mosquito)
+  #define MIN_PROBE_EDGE 5
+#else
+  #define MIN_PROBE_EDGE 5
+#endif
 
 // X and Y axis travel speed (mm/m) between probes
 #define XY_PROBE_SPEED 5000
@@ -1218,18 +1224,23 @@
 // @section machine
 
 // The size of the print bed
- #if ANY(PetsfangMicroswiss, Mosquito)
-  #define CarriageModifier 10
+ #if ENABLED(Mosquito)
+  #define XCarriageModifier 10
+  #define YCarriageModifier 35
+ #elif ENABLED(PetsfangMicroswiss)
+  #define XCarriageModifier 10
+  #define YCarriageModifier 10
 #else
-  #define CarriageModifier 0
+  #define XCarriageModifier 0
+  #define YCarriageModifier 0
 #endif
 
 #if ENABLED(SX2)
-  #define X_BED_SIZE 248 - CarriageModifier
-  #define Y_BED_SIZE 238 - CarriageModifier
+  #define X_BED_SIZE 248 - XCarriageModifier
+  #define Y_BED_SIZE 238 - YCarriageModifier
 #else
-  #define X_BED_SIZE 398 - CarriageModifier
-  #define Y_BED_SIZE 390 - CarriageModifier
+  #define X_BED_SIZE 398 - XCarriageModifier
+  #define Y_BED_SIZE 390 - YCarriageModifier
 #endif
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
