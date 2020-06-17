@@ -72,3 +72,4 @@ const unsigned char status_logo_bmp[] PROGMEM = {
   #define STATUS_HEATERS_X      32
   #define STATUS_BED_X          80
 #endif
+

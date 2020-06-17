@@ -82,8 +82,8 @@
    Choose ABL sensor type below
    Leave all disabled if no sensor is available
 */
-#define ABL_EZABL // TH3D EZABL or Any NO Sensor
-//#define ABL_NCSW //Creality ABL or Any NC Sensor
+//#define ABL_EZABL // TH3D EZABL or Any NO Sensor
+#define ABL_NCSW //Creality ABL or Any NC Sensor
 //#define ABL_BLTOUCH
 //#define ABL_TOUCH_MI // Uncomment ABL_TOUCH_MI to use Touch-MI sensor by hotends.fr
 
